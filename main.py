@@ -57,8 +57,30 @@ class OpenReddit(unittest.TestCase):
                     url.send_keys(OpenReddit.url)
                     title.send_keys(OpenReddit.title)
                     subreddit.send_keys(OpenReddit.subreddit_set[i])
-                    time.sleep(20)
+                    driver.implicitly_wait(20)
+
                     driver.find_element_by_xpath('//*[@id="newlink"]/div[4]/button').click()
+                    time.sleep(2)
+                    try:
+                        driver.switch_to.alert.accept()
+                    except Exception as e:
+                        pass
+
+
+                    try:
+                        error = driver.find_element_by_xpath('//*[@id="newlink"]/div[4]/span[2]')
+                        val = [int(s) for s in error.split() if s.isdigit()]
+
+                        if(error):
+                            time.sleep(val*60 +10)
+                            driver.find_element_by_xpath('//*[@id="newlink"]/div[4]/button').click()
+                            try:
+                                driver.switch_to.alert.accept()
+                            except Exception as e:
+                                pass
+
+                    except Exception as e:
+                        pass
 
                     driver.implicitly_wait(10)
                     driver.get('http://www.reddit.com/submit')
